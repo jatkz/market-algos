@@ -1,5 +1,5 @@
 import os
-from pymongo import MongoClient
+from pymongo import MongoClient, database
 import pandas
 import datetime as dt
 
@@ -21,3 +21,11 @@ class MongoDatabase:
         df = pandas.DataFrame(data_document['candles'])
         df['datetime_readable'] = df['datetime'].apply(lambda x: dt.datetime.fromtimestamp(x / 1000))
         return df
+
+    def upload_dataset(self, collection_name, symbol, dataframe):
+        document = {
+                    "symbol": symbol,
+                    "dataset": dataframe.to_dict('records')
+                }
+        self.database[collection_name].replace_one({'symbol':symbol}, document, upsert=True)
+
