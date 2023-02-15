@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 run-one init_worker.sh &  
 status=$?
